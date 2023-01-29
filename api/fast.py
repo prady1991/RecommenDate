@@ -81,13 +81,13 @@ def predict(sex,orientation,essay0,essay1,essay2,essay3,essay4,essay5,essay6,ess
     df_sim=similarity_mean(decompose_list,500,index=59946)
     # res = np.argsort(df_sim)[::-1][:5]
     indexes = df_sim.index
-    df_result = dforiginal.iloc[indexes[1:]]
+    df_result = dforiginal.iloc[indexes[1:-1]]
     df_result = df_result.fillna('')
     if df_clean.iloc[59946]["orientation"]=="straight":
         if df_clean.iloc[59946]["sex"]=="m":
-            df_result3 = df_result[df_result["sex"]=="f"]
+            df_result3 = df_result[(df_result["sex"]=="f") & (df_result["orientation"]=="straight")]
         if df_clean.iloc[59946]["sex"]=="f":
-            df_result3 = df_result[df_result["sex"]=="m"]
+            df_result3 = df_result[(df_result["sex"]=="m") & (df_result["orientation"]=="straight")]
     if df_clean.iloc[59946]["orientation"]=="gay":
         if df_clean.iloc[59946]["sex"]=="m":
             df_result3 = df_result[(df_result["sex"]=="m") & (df_result["orientation"]=="gay")]
@@ -96,7 +96,33 @@ def predict(sex,orientation,essay0,essay1,essay2,essay3,essay4,essay5,essay6,ess
     if df_clean.iloc[59946]["orientation"]=="bisexual":
         df_result3 = df_result
 
-    dict2 = df_result3.head(3).to_dict()
+    df_result4 = df_result3.head(3)
 
+    topics_list=[]
+    for i in range(10):
+        if i == 2:
+            topics_list.append(get_topic(components_list[i],200,5))
+        else:
+            topics_list.append(get_topic(components_list[i],500,5))
+
+    matches =[]
+    for i in range(3):
+        for j in range(10):
+            matches.append(matching_topics(decompose_list[j],59946,indexes[i],components_list[j])[0])
+
+    words1=''
+    words2=''
+    words3=''
+    for i in range(5):
+        for j in range(10):
+            words1 = topics_list[j][matches[j][i]]+', '+ words1
+            words2 = topics_list[j][matches[j+10][i]]+', '+ words2
+            words3 = topics_list[j][matches[j+20][i]]+', '+ words3
+
+    word_list = [words1,words2,words3]
+    se = pd.Series(word_list)
+    df_result4["topics"] = se.values
+
+    dict2 = df_result4.to_dict()
     return dict2
 # $DELETE_END
