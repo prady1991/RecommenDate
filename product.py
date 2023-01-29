@@ -8,8 +8,8 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded")
 
-with open("style.css") as a:
-    st.markdown(f'<style>{a.read()}</style>',unsafe_allow_html=True)
+# with open("style.css") as a:
+#     st.markdown(f'<style>{a.read()}</style>',unsafe_allow_html=True)
 
 st.markdown(
     """
