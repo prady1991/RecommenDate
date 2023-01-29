@@ -45,7 +45,7 @@ with st.sidebar:
                 essay8 =col2.text_area("The most private thing I am willing to admit")
                 essay9 =col2.text_area("You should message me if...")
             submitted = st.form_submit_button(label= "Bring my soulmate", )
-url = 'https://onlinedatingrecommedersystem-ygdtvu6iaa-ew.a.run.app/predict'
+url = 'https://www.recommedate-ygdtvu6iaa-ew.a.run.app/predict'
 
 
 params ={
